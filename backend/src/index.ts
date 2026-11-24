@@ -2,8 +2,6 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
-import path from 'node:path';
-import {fileURLToPath} from 'node:url';
 import {z} from 'zod';
 import {generate,evaluationSchema,followSchema,reportSchema} from './ai.js';
 import {evaluationPrompt} from './prompts/evaluationPrompt.js';
@@ -20,6 +18,6 @@ const followReq=z.object({context,state:z.record(z.string(),z.any()),questions:z
 app.post('/api/session/follow-up',async(req,res)=>{const p=followReq.safeParse(req.body);if(!p.success)return res.status(400).json({error:'The answer could not be submitted. Please try again.'});try{res.json({evaluation:await generate(followUpPrompt(p.data),followSchema)});}catch(e:any){res.status(e.status||500).json({error:e.message,code:e.code});}});
 const finishReq=z.object({context,state:z.record(z.string(),z.any())});
 app.post('/api/session/finish',async(req,res)=>{const p=finishReq.safeParse(req.body);if(!p.success)return res.status(400).json({error:'The session report could not be created.'});try{res.json({report:await generate(finalReportPrompt({...p.data.context,state:p.data.state}),reportSchema)});}catch(e:any){res.status(e.status||500).json({error:e.message,code:e.code});}});
-const here=path.dirname(fileURLToPath(import.meta.url));const webDist=path.resolve(here,'../../frontend/dist');app.use(express.static(webDist));app.get('*',(req,res,next)=>{if(req.path.startsWith('/api/'))return next();res.sendFile(path.join(webDist,'index.html'),err=>{if(err)next(err);});});
+app.use((_req,res)=>res.status(404).json({error:'API route not found.'}));
 app.use((err:any,_req:any,res:any,_next:any)=>{console.error(err);res.status(500).json({error:'Something went wrong. Please try again.'});});
 const port=Number(process.env.PORT)||3001;app.listen(port,()=>console.log(`EduPrompt API listening on ${port}`));

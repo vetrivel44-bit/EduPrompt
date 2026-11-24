@@ -29,4 +29,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .voice-button:disabled{opacity:.45;cursor:not-allowed}
 .answer-tools{gap:9px;flex-wrap:wrap}
 .answer-tools .submit-button{margin-left:auto}
+.voice-note{display:block;margin:8px 1px 0;color:#8996aa;font-size:9px;line-height:1.5}
 @keyframes voice-pulse{50%{box-shadow:0 0 0 4px #e99b8526}}
