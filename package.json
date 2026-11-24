@@ -1,0 +1,7 @@
+{
+  "name": "eduprompt",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {"dev": "concurrently -k \"npm:dev:backend\" \"npm:dev:frontend\"", "dev:backend": "npm --prefix backend run dev", "dev:frontend": "npm --prefix frontend run dev", "build": "npm --prefix frontend run build && npm --prefix backend run build", "start": "npm --prefix backend start"},
+  "devDependencies": {"concurrently": "^9.1.2"}
+}
